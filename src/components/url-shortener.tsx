@@ -34,42 +34,9 @@ export default function URLShortener() {
   }, [isDarkMode])
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-  
-    try {
-      const generatedShortUrl = Math.random().toString(36).substr(2, 6);
-      const shortUrl = `${window.location.origin}/${generatedShortUrl}`;
-      setShortUrl(shortUrl);
-  
-      const response = await fetch('/api/shorten', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          originalUrl: longUrl,
-          shortUrl: generatedShortUrl,
-        }),
-      });
-  
-      if (!response.ok) {
-        let errorMessage = 'Failed to save the URL';
-        try {
-          const errorData = await response.json();
-          errorMessage = errorData.error || errorMessage;
-        } catch {
-          // Ignore errors
-
-        }
-      }
-  
-      console.log('URL saved successfully!');
-    } catch (error) {
-      console.error('Error saving URL:', error);
-    }
-  };
-  
-  
+    e.preventDefault()
+    setShortUrl(`https://short.url/${Math.random().toString(36).substr(2, 6)}`)
+  }
 
   return (
     <div className={`min-h-screen ${isDarkMode ? 'bg-black' : 'bg-white'} transition-colors duration-200 flex flex-col`}>
@@ -83,7 +50,7 @@ export default function URLShortener() {
               asChild
               className={isDarkMode ? 'text-white' : 'text-black'}
             >
-              <a href="https://github.com/prgrmr-jr/url-shortener-web.git" target="_blank" rel="noopener noreferrer">
+              <a href="https://github.com/yourusername/your-repo" target="_blank" rel="noopener noreferrer">
                 <Github className="h-[1.2rem] w-[1.2rem]" />
                 <span className="sr-only">GitHub repository</span>
               </a>
@@ -118,7 +85,7 @@ export default function URLShortener() {
               type="submit" 
               className={`w-full py-2 px-4 rounded-md ${
                 isDarkMode
-                  ? 'bg-white hover:text-gray text-black'
+                  ? 'bg-blue-600 hover:bg-blue-700 text-white'
                   : 'bg-black hover:bg-gray-900 text-white'
               } transition-colors duration-200`}
             >
@@ -127,30 +94,30 @@ export default function URLShortener() {
           </form>
           
           {shortUrl && (
-  <div className={`mt-8 p-4 rounded-md ${isDarkMode ? 'bg-gray-900' : 'bg-gray-100'}`}>
-    <Label className={`text-sm font-medium ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>Shortened URL</Label>
-    <div className="mt-2 flex items-center">
-      <Input
-        value={shortUrl}
-        readOnly
-        className={`flex-grow pr-10 ${
-          isDarkMode
-            ? 'bg-gray-800 text-white'
-            : 'bg-white text-black'
-        } rounded-md border-0 focus:ring-2 focus:ring-blue-500`}
-      />
-      <Button
-        type="button"
-        variant="ghost"
-        className={`ml-2 ${isDarkMode ? 'text-gray-400 hover:text-white' : 'text-gray-600 hover:text-black'}`}
-        onClick={() => navigator.clipboard.writeText(shortUrl)}
-      >
-        <Copy className="h-4 w-4" />
-        <span className="sr-only">Copy</span>
-      </Button>
-    </div>
-  </div>
-)}
+            <div className={`mt-8 p-4 rounded-md ${isDarkMode ? 'bg-gray-900' : 'bg-gray-100'}`}>
+              <Label className={`text-sm font-medium ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>Shortened URL</Label>
+              <div className="mt-2 flex items-center">
+                <Input
+                  value={shortUrl}
+                  readOnly
+                  className={`flex-grow pr-10 ${
+                    isDarkMode 
+                      ? 'bg-gray-800 text-white' 
+                      : 'bg-white text-black'
+                  } rounded-md border-0 focus:ring-2 focus:ring-blue-500`}
+                />
+                <Button
+                  type="button"
+                  variant="ghost"
+                  className={`ml-2 ${isDarkMode ? 'text-gray-400 hover:text-white' : 'text-gray-600 hover:text-black'}`}
+                  onClick={() => navigator.clipboard.writeText(shortUrl)}
+                >
+                  <Copy className="h-4 w-4" />
+                  <span className="sr-only">Copy</span>
+                </Button>
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </div>
