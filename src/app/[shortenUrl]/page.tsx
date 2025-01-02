@@ -1,10 +1,18 @@
+
+
 import { PrismaClient } from "@prisma/client";
 import { notFound } from "next/navigation";
 import Head from "next/head";
 
+interface RedirectPageProps {
+  params: {
+    shortenUrl: string;
+  };
+}
+
 const prisma = new PrismaClient();
 
-export default async function RedirectPage({ params }: { params: { shortenUrl: string } }) {
+export default async function RedirectPage({ params }: RedirectPageProps) {
   const { shortenUrl } = params;
 
   try {
