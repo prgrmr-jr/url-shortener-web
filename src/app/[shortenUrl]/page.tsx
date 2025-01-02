@@ -1,13 +1,13 @@
-
-
 import { PrismaClient } from "@prisma/client";
 import { notFound } from "next/navigation";
 import Head from "next/head";
 
+interface Params {
+  shortenUrl: string;
+}
+
 interface RedirectPageProps {
-  params: {
-    shortenUrl: string;
-  };
+  params: Params;
 }
 
 const prisma = new PrismaClient();
