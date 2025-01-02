@@ -41,7 +41,7 @@ export default function URLShortener() {
       const shortUrl = `${window.location.origin}/${generatedShortUrl}`;
       setShortUrl(shortUrl);
   
-      const response = await fetch('/api/shorten', {
+      await fetch('/api/shorten', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -51,18 +51,7 @@ export default function URLShortener() {
           shortUrl: generatedShortUrl,
         }),
       });
-  
-      if (!response.ok) {
-        let errorMessage = 'Failed to save the URL';
-        try {
-          const errorData = await response.json();
-          errorMessage = errorData.error || errorMessage;
-        } catch {
-          // Ignore errors
 
-        }
-      }
-  
       console.log('URL saved successfully!');
     } catch (error) {
       console.error('Error saving URL:', error);
