@@ -1,18 +1,20 @@
-// app/[shortenUrl]/page.tsx
-
 import { PrismaClient } from "@prisma/client";
 import { notFound } from "next/navigation";
 import Head from "next/head";
 
 const prisma = new PrismaClient();
 
-export default async function RedirectPage({ params }: { params: { shortenUrl: string } }) {
-  const { shortenUrl } = params;
+export default async function RedirectPage({ params }: { params: { slug?: string } }) {
+  const { slug } = params;
+
+  if (!slug) {
+    notFound();
+  }
 
   try {
     const savedUrl = await prisma.saved_url.findUnique({
       where: {
-        shortUrl: shortenUrl,
+        shortUrl: slug,
       },
     });
 
