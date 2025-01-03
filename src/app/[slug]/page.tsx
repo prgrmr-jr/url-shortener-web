@@ -1,3 +1,5 @@
+'use client';
+
 import { PrismaClient } from "@prisma/client";
 import { notFound } from "next/navigation";
 import Head from "next/head";
@@ -5,7 +7,8 @@ import Head from "next/head";
 const prisma = new PrismaClient();
 
 export default async function RedirectPage({ params }: { params: { slug?: string } }) {
-  const { slug } = params || undefined;
+  const resolvedParams = await Promise.resolve(params);
+  const { slug } = resolvedParams || {};
 
   if (!slug) {
     notFound();
