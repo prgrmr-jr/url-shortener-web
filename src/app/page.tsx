@@ -35,12 +35,11 @@ export default function URLShortener() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-  
     try {
       const generatedShortUrl = Math.random().toString(36).substr(2, 6);
       const shortUrl = `${window.location.origin}/${generatedShortUrl}`;
       setShortUrl(shortUrl);
-  
+
       await fetch('/api/shorten', {
         method: 'POST',
         headers: {
@@ -57,92 +56,87 @@ export default function URLShortener() {
       console.error('Error saving URL:', error);
     }
   };
-  
-  
 
   return (
-    <div className={`min-h-screen ${isDarkMode ? 'bg-black' : 'bg-white'} transition-colors duration-200 flex flex-col`}>
-      <div className="w-full max-w-4xl mx-auto p-4 sm:p-6 lg:p-8">
-        <header className="flex justify-between items-center mb-8">
-          <h1 className={`text-2xl font-bold ${isDarkMode ? 'text-white' : 'text-black'}`}>URL Shortener</h1>
+    <div className={`min-h-screen flex flex-col ${isDarkMode ? 'bg-black' : 'bg-white'} transition-colors duration-200`}>
+      {/* Header */}
+      <div className="w-full max-w-4xl mx-auto p-4 sm:p-6">
+        <header className="flex justify-between items-center mb-6">
+          <h1 className={`text-3xl font-bold ${isDarkMode ? 'text-white' : 'text-black'}`}>URL Shortener</h1>
           <div className="flex items-center space-x-2">
-            <Button
-              variant="ghost"
-              size="icon"
-              asChild
-              className={isDarkMode ? 'text-white' : 'text-black'}
-            >
-              <a href="https://github.com/prgrmr-jr/url-shortener-web.git" target="_blank" rel="noopener noreferrer">
-                <Github className="h-[1.2rem] w-[1.2rem]" />
-                <span className="sr-only">GitHub repository</span>
-              </a>
-            </Button>
-            <Button variant="ghost" size="icon" onClick={toggleDarkMode} className={isDarkMode ? 'text-white' : 'text-black'}>
-              {isDarkMode ? <Sun className="h-[1.2rem] w-[1.2rem]" /> : <Moon className="h-[1.2rem] w-[1.2rem]" />}
+            <a href="https://github.com/prgrmr-jr/url-shortener-web.git" target="_blank" rel="noopener noreferrer">
+              <Github className={`h-6 w-6 ${isDarkMode ? 'text-white' : 'text-black'}`} />
+            </a>
+            <Button variant="ghost" size="icon" onClick={toggleDarkMode}>
+              {isDarkMode ? <Sun className="h-6 w-6" /> : <Moon className="h-6 w-6" />}
             </Button>
           </div>
         </header>
+
+        {/* Main Content */}
+        <div className="flex-grow flex items-center justify-center mt-[300px]">
+  <div className="text-center">
+    {/* Tagline */}
+    <p className={`text-lg mb-6 ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+  Shorten your URLs in seconds with our <strong>free</strong> and <strong>fast</strong> service. Get started now!
+</p>
+
+
+    {/* Form */}
+    <form onSubmit={handleSubmit} className="space-y-4">
+      <div>
+        <Label htmlFor="url" className={`block text-lg font-medium mb-2 ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+          Enter your long URL
+        </Label>
+        <Input
+          id="url"
+          type="url"
+          placeholder="https://example.com/very/long/url"
+          value={longUrl}
+          onChange={(e) => setLongUrl(e.target.value)}
+          required
+          className={`w-full p-4 text-lg rounded-lg border ${isDarkMode ? 'bg-gray-800 border-gray-700 text-white' : 'bg-white border-gray-300 text-black'} focus:ring-2 focus:ring-blue-500`}
+        />
       </div>
-      
-      <div className="flex-grow flex items-center justify-center">
-        <div className="w-full max-w-md px-4">
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="url" className={`text-sm ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>Enter your long URL</Label>
-              <Input
-                id="url"
-                type="url"
-                placeholder="https://example.com/very/long/url"
-                value={longUrl}
-                onChange={(e) => setLongUrl(e.target.value)}
-                required
-                className={`w-full p-2 rounded-md border ${
-                  isDarkMode 
-                    ? 'bg-gray-900 border-gray-700 text-white placeholder-gray-500' 
-                    : 'bg-white border-gray-300 text-black placeholder-gray-400'
-                } focus:outline-none focus:ring-2 focus:ring-blue-500`}
-              />
-            </div>
-            <Button 
-              type="submit" 
-              className={`w-full py-2 px-4 rounded-md ${
-                isDarkMode
-                  ? 'bg-white hover:text-gray text-black'
-                  : 'bg-black hover:bg-gray-900 text-white'
-              } transition-colors duration-200`}
-            >
-              Shorten URL
-            </Button>
-          </form>
-          
-          {shortUrl && (
-  <div className={`mt-8 p-4 rounded-md ${isDarkMode ? 'bg-gray-900' : 'bg-gray-100'}`}>
-    <Label className={`text-sm font-medium ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>Shortened URL</Label>
-    <div className="mt-2 flex items-center">
-      <Input
-        value={shortUrl}
-        readOnly
-        className={`flex-grow pr-10 ${
-          isDarkMode
-            ? 'bg-gray-800 text-white'
-            : 'bg-white text-black'
-        } rounded-md border-0 focus:ring-2 focus:ring-blue-500`}
-      />
+
       <Button
-        type="button"
-        variant="ghost"
-        className={`ml-2 ${isDarkMode ? 'text-gray-400 hover:text-white' : 'text-gray-600 hover:text-black'}`}
-        onClick={() => navigator.clipboard.writeText(shortUrl)}
+        type="submit"
+        className={`w-full py-4 text-lg font-semibold rounded-lg ${isDarkMode ? 'bg-white text-black' : 'bg-black text-white'} transition-colors hover:opacity-90`}
       >
-        <Copy className="h-4 w-4" />
-        <span className="sr-only">Copy</span>
+        Shorten URL
       </Button>
-    </div>
-  </div>
-)}
+    </form>
+
+            {/* Shortened URL Display */}
+            {shortUrl && (
+              <div className={`mt-6 p-4 rounded-md ${isDarkMode ? 'bg-gray-800' : 'bg-gray-100'}`}>
+                <Label className={`block text-lg font-medium mb-2 ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>Shortened URL</Label>
+                <div className="mt-2 flex items-center">
+                  <Input
+                    value={shortUrl}
+                    readOnly
+                    className={`flex-grow p-3 text-lg rounded-lg ${isDarkMode ? 'bg-gray-900 text-white' : 'bg-white text-black'} border-0`}
+                  />
+                  <Button
+                    type="button"
+                    className={`ml-2 p-3 rounded-md  ${isDarkMode ? 'text-gray-400 hover:text-white' : 'text-gray-600 hover:text-black'}`}
+                    onClick={() => navigator.clipboard.writeText(shortUrl)}
+                  >
+                    <Copy className="h-5 w-5" />
+                  </Button>
+                </div>
+              </div>
+            )}
+          </div>
         </div>
       </div>
-    </div>
-  )
-}
 
+      {/* Footer */}
+      <footer className={`py-4 text-center mt-auto ${isDarkMode ? 'bg-gray-900 text-gray-400' : 'bg-gray-100 text-gray-700'}`}>
+        <p className="text-sm">
+          Built with ❤️ by <a href="https://github.com/prgrmr-jr" target='_blank' className="underline">prgrmr-jr</a>. All rights reserved.
+        </p>
+      </footer>
+    </div>
+  );
+}
