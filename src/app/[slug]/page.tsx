@@ -1,46 +1,21 @@
 'use client';
 
-import { PrismaClient } from "@prisma/client";
-import { notFound } from "next/navigation";
-import Head from "next/head";
+import { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 
-const prisma = new PrismaClient();
+export default function Page({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}) {
+  const router = useRouter();
 
-export default async function RedirectPage( params : { slug: string } ) {
-  const resolvedParams = await Promise.resolve(params);
-  const { slug } = resolvedParams || {};
+  useEffect(() => {
+    (async () => {
+      const { slug } = await params;
+      router.push(`/api/shorten/${slug}`);
+    })();
+  }, [params, router]);
 
-  if (!slug) {
-    notFound();
-  }
-
-  try {
-    const savedUrl = await prisma.saved_url.findUnique({
-      where: {
-        shortUrl: slug,
-      },
-    });
-
-    if (savedUrl) {
-      return (
-        <>
-          <Head>
-            <title>Redirecting...</title>
-          </Head>
-          <script
-            dangerouslySetInnerHTML={{
-              __html: `window.location.href = "${savedUrl.originalUrl}";`,
-            }}
-          />
-        </>
-      );
-    } else {
-      notFound();
-    }
-  } catch (error) {
-    console.error("Error fetching shortened URL:", error);
-    notFound();
-  } finally {
-    await prisma.$disconnect();
-  }
+  return <div>Redirecting...</div>;
 }
