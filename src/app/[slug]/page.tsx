@@ -6,7 +6,7 @@ import Head from "next/head";
 
 const prisma = new PrismaClient();
 
-export default async function RedirectPage({ params }: { params: { slug?: string } }) {
+export default async function RedirectPage( params : { slug: string } ) {
   const resolvedParams = await Promise.resolve(params);
   const { slug } = resolvedParams || {};
 
