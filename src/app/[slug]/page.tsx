@@ -5,7 +5,7 @@ import Head from "next/head";
 const prisma = new PrismaClient();
 
 export default async function RedirectPage({ params }: { params: { slug?: string } }) {
-  const { slug } = params;
+  const { slug } = params || undefined;
 
   if (!slug) {
     notFound();
@@ -37,5 +37,7 @@ export default async function RedirectPage({ params }: { params: { slug?: string
   } catch (error) {
     console.error("Error fetching shortened URL:", error);
     notFound();
+  } finally {
+    await prisma.$disconnect();
   }
 }
